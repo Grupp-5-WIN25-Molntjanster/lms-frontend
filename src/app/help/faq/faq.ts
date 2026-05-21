@@ -6,8 +6,8 @@ export type Faq = {
   displayOrder: number
 }
 export async function getFaqs(): Promise<Faq[]> {
-  const res = await fetch("http://localhost:5064/api/faqs", {
-    headers: { "X-API-KEY": "a6c7e84b9d0c45cda31198d908011a64" },
+  const res = await fetch(`${process.env.NEXT_PUBLIC_FAQ_API_URL}/api/faqs`, {
+    headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_FAQ_API_TOKEN}` },
     next: { revalidate: 60 },
   })
   if (!res.ok) throw new Error("Failed to fetch FAQs")
