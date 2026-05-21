@@ -12,9 +12,8 @@ export function HelpBanner() {
     <>
       <Card padding="lg" className="mb-6 flex items-center justify-between bg-primary/5">
         <div className="flex items-center gap-3">
-          <HelpIcon className="h-8 w-8 text-primary" />
           <div>
-            <h2 className="text-lg font-bold text-secondary">Need some help?</h2>
+            <h1 className="text-lg font-bold text-secondary">Need some help?</h1>
             <p className="text-sm text-muted">Want answer right away? Select your reference below for our answers.</p>
           </div>
         </div>

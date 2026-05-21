@@ -20,14 +20,13 @@ export function FaqCard({ title, summary, content }: FaqCardProps) {
           {content}
         </p>
       )}
-      <Button
-        variant="secondary"
-        size="sm"
-        className="self-start mt-auto"
+      <button
         onClick={() => setOpen((prev) => !prev)}
+        className="self-start mt-auto flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-400 transition-colors"
       >
         {open ? "Show Less" : "Read More"}
-      </Button>
+        <span>{open ? "↑" : "→"}</span>
+      </button>
     </Card>
   )
 }
