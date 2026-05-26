@@ -15,16 +15,15 @@ export default function ProfilePage() {
   const [description, setDescription] = useState("");
 
   // ── Mock fetch ─────────────────────────────
-  // Later this will come from API/Auth Service
-  useEffect(() => {
-    // Fake user data for now
-    setFirstName("Hasan");
-    setLastName("Mahmud");
-    setPhone("+46 70 123 45 67");
-    setDescription(
-      "A passionate UI/UX Designer with hands-on experience designing intuitive digital products.",
-    );
-  }, []);
+
+useEffect(() => {
+
+  // Temporary mock user until gateway/auth integration is ready
+  setFirstName("Hasan");
+  setLastName("Mahmud");
+  setDescription("Logged in as UX Designer");
+
+}, []);
 
   // ── Save handler ───────────────────────────
   // Later this will call PUT /api/profile
