@@ -17,12 +17,7 @@ export default function ProfilePage() {
   const [description, setDescription] = useState("");
 
   // ── Skills state ───────────────────────────
-  const [skills] = useState<string[]>([
-    "UX Design",
-    "React",
-    "UI Design",
-    "Figma",
-  ]);
+  const [skills, setSkills] = useState<string[]>([]);
 
   // ── Achievements state ───────────────────────────
   const [achievements] = useState<string[]>([
@@ -51,7 +46,22 @@ export default function ProfilePage() {
     };
 
     fetchProfile();
+    fetchSkills();
   }, []);
+
+  const fetchSkills = async () => {
+    try {
+      const response = await fetch("https://localhost:7054/api/profile/skills");
+
+      const data = await response.json();
+
+      const skillNames = data.map((skill: { name: string }) => skill.name);
+
+      setSkills(skillNames);
+    } catch (error) {
+      console.error("Failed to fetch skills", error);
+    }
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -64,24 +74,40 @@ export default function ProfilePage() {
   };
 
   // ── Save handler ───────────────────────────
-  // Later this will call PUT /api/profile
-  const handleSave = () => {
-    const updatedProfile = {
-      firstName,
-      lastName,
-      phone,
-      description,
-    };
+  const handleSave = async () => {
+    try {
+      const response = await fetch("https://localhost:7054/api/profile", {
+        method: "PUT",
 
-    console.log("Saving profile:", updatedProfile);
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-    alert("Profile saved!");
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          phoneNumber: phone,
+          bio: description,
+          profileImageUrl: profileImage,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save profile");
+      }
+
+      alert("Profile saved!");
+    } catch (error) {
+      console.error(error);
+
+      alert("Something went wrong");
+    }
   };
 
   return (
     <ProfileShell active="general">
       {/* Two columns */}
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[350px_1fr]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[380px_1fr]">
         {/* Left column */}
         <ProfileCard
           firstName={firstName}

@@ -16,20 +16,20 @@ export function ProfileCard({
   profileImage,
 }: ProfileCardProps) {
   return (
-    <div className="flex flex-col gap-6 rounded-3xl bg-white p-6">
+    <div className="flex flex-col gap-5 rounded-3xl bg-white p-5">
       {/* Banner */}
       <img
         src="/cover-image.png"
         alt="Cover"
-        className="h-32 w-full rounded-2xl object-cover"
+        className="h-28 w-full rounded-2xl object-cover"
       />
 
       {/* Avatar */}
-      <div className="-mt-16 flex justify-center">
+      <div className="-mt-14 flex justify-center">
         <img
           src={profileImage}
           alt="Profile"
-          className="h-28 w-28 rounded-full border-4 border-white object-cover"
+          className="h-24 w-24 rounded-full border-4 border-white object-cover"
         />
       </div>
 
@@ -46,11 +46,11 @@ export function ProfileCard({
       <div className="flex flex-col gap-3">
         <h3 className="text-lg font-semibold text-secondary">Skills</h3>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3">
           {skills.map((skill, index) => (
             <div
               key={index}
-              className="rounded-full bg-bg px-3 py-1 text-sm text-secondary"
+              className="rounded-full border border-secondary/10 bg-bg px-4 py-1 text-xs font-medium tracking-wide text-secondary/50"
             >
               {skill}
             </div>
@@ -79,7 +79,7 @@ export function ProfileCard({
       <div className="flex flex-col gap-3">
         <h3 className="text-lg font-semibold text-secondary">Bio</h3>
 
-        <div className="rounded-2xl bg-bg p-4 text-sm text-muted">
+        <div className="rounded-2xl bg-bg p-5 text-sm leading-7 text-muted">
           {description}
         </div>
       </div>
