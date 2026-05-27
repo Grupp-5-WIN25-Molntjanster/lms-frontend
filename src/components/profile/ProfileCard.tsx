@@ -4,6 +4,7 @@ type ProfileCardProps = {
   description: string;
   skills: string[];
   achievements: string[];
+  profileImage: string;
 };
 
 export function ProfileCard({
@@ -12,6 +13,7 @@ export function ProfileCard({
   description,
   skills,
   achievements,
+  profileImage,
 }: ProfileCardProps) {
   return (
     <div className="flex flex-col gap-6 rounded-3xl bg-white p-6">
@@ -20,7 +22,11 @@ export function ProfileCard({
 
       {/* Avatar */}
       <div className="-mt-16 flex justify-center">
-        <div className="h-28 w-28 rounded-full border-4 border-white bg-bg" />
+        <img
+          src={profileImage}
+          alt="Profile"
+          className="h-28 w-28 rounded-full border-4 border-white object-cover"
+        />
       </div>
 
       {/* Name */}

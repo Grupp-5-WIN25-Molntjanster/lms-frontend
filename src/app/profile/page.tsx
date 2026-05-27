@@ -32,6 +32,10 @@ export default function ProfilePage() {
     "Frontend",
   ]);
 
+  const [profileImage, setProfileImage] = useState(
+    "/images/avatar-placeholder.svg",
+  );
+
   // ── Mock fetch ─────────────────────────────
   useEffect(() => {
     // Temporary mock user until gateway/auth integration is ready
@@ -66,6 +70,7 @@ export default function ProfilePage() {
           description={description}
           skills={skills}
           achievements={achievements}
+          profileImage={profileImage}
         />
 
         {/* Right column */}
