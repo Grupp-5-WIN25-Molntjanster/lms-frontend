@@ -68,9 +68,9 @@ export default async function CoursesPage() {
                 {/* Popular This Week */}
                 <div className="rounded-3xl bg-white p-6">
                     <div className="mb-6 flex items-center justify-between">
-                        <h2 className="text-3xl font-bold text-secondary">
+                        <h1 className="text-3xl font-bold text-secondary">
                             Popular This Week
-                        </h2>
+                        </h1>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -107,9 +107,9 @@ export default async function CoursesPage() {
 
                 {/* All Courses */}
                 <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold text-secondary">
+                    <h1 className="text-3xl font-bold text-secondary">
                         All Courses
-                    </h2>
+                    </h1>
 
                     <button className="text-primary font-medium">
                         See All
@@ -121,37 +121,37 @@ export default async function CoursesPage() {
                     {courses.map((course) => (
                         <Card
                             key={course.id}
-                            className="flex flex-col gap-4 overflow-hidden rounded-3xl p-4">
+                            className="flex flex-col gap-6 overflow-hidden rounded-3xl bg-white p-6">
+
                             <div className="overflow-hidden rounded-2xl">
                                 <img
                                     src={courseImages[course.id]}
                                     alt={course.title}
-                                    className="aspect-[16/8] w-full object-cover"/>
+                                    className="w-full object-cover rounded-2xl"/>
                             </div>
 
-                            <div className="flex flex-col gap-2">
-                                <h3 className="text-2xl font-bold text-secondary">
+                            <div className="flex flex-col gap-3 px-1 pt-2">
+                                <h2 className="text-3xl font-semibold text-secondary">
                                     {course.title}
-                                </h3>
+                                </h2>
 
-                                <p className="text-sm text-muted">
-                                    {course.description}
-                                </p>
+                                <div className="flex items-center gap-3 text-muted">
+                                    <span>{course.instructor}</span>
+                                    <span>5.0 ★</span>
+                                </div>
 
-                                <p className="text-xs text-muted">
-                                    {course.instructor} ·{" "}
-                                    {course.lessonsCount} lessons ·{" "}
-                                    {course.duration}
-                                </p>
+                                <div className="flex items-center justify-between pt-1">
+                                    <p className="text-muted">
+                                        {course.lessonsCount} Lessons · {course.duration}
+                                    </p>
+
+                                    <Link href={`/courses/${course.id}`}>
+                                        <Button variant="primary" size="lg">
+                                            View Details ↗
+                                        </Button>
+                                    </Link>
+                                </div>
                             </div>
-
-                            <Link
-                                href={`/courses/${course.id}`}
-                                className="mt-auto">
-                                <Button variant="primary" size="sm">
-                                    View Details
-                                </Button>
-                            </Link>
                         </Card>
                     ))}
                 </div>

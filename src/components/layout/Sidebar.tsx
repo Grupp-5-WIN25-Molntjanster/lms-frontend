@@ -80,7 +80,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       {/* Logo + close button on mobile */}
       <div className="flex items-center justify-between px-2 py-2">
           <Image
-            src="/logo2.png"
+            src="/logo.png"
             alt="Shiko Logo"
             width={140}
             height={40}
