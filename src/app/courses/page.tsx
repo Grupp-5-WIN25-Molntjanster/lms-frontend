@@ -38,7 +38,7 @@ export default async function CoursesPage() {
               <img
                 src={course.imageUrl}
                 alt={course.title}
-                className="h-48 w-full rounded-xl object-cover"
+                className="w-full rounded-xl object-cover"
               />
 
               <div className="flex flex-col gap-2">
