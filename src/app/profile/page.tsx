@@ -95,14 +95,36 @@ export default function ProfilePage() {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
-    const imageUrl = URL.createObjectURL(file);
+    try {
+      const formData = new FormData();
 
-    setProfileImage(imageUrl);
+      formData.append("file", file);
+
+      const response = await fetch(
+        "https://localhost:7054/api/profile/upload-image",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const data = await response.json();
+
+      setProfileImage(data.imageUrl);
+    } catch (error) {
+      console.error(error);
+
+      alert("Failed to upload image");
+    }
   };
 
   // ── Save handler ───────────────────────────
@@ -156,7 +178,7 @@ export default function ProfilePage() {
           <div className="flex items-center gap-4">
             <div className="h-14 w-14 rounded-xl bg-bg" />
 
-            <label>
+            <label className="cursor-pointer">
               <input
                 type="file"
                 accept="image/*"
@@ -164,9 +186,9 @@ export default function ProfilePage() {
                 onChange={handleImageChange}
               />
 
-              <Button type="button" variant="secondary" size="sm">
+              <span className="inline-flex items-center rounded-xl border border-secondary/10 bg-bg px-4 py-2 text-sm font-medium text-secondary hover:bg-secondary/5">
                 Upload photo
-              </Button>
+              </span>
             </label>
           </div>
 
