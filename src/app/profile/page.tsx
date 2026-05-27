@@ -8,6 +8,7 @@ import { ProfileCard } from "@/components/profile/ProfileCard";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { jwtDecode } from "jwt-decode";
 
 export default function ProfilePage() {
   // ── Form state ─────────────────────────────
@@ -20,14 +21,24 @@ export default function ProfilePage() {
   const [skills, setSkills] = useState<string[]>([]);
 
   // ── Achievements state ───────────────────────────
-  const [achievements] = useState<string[]>([
-    "Top Student",
-    "React Course",
-    "UI Design",
-    "Frontend",
-  ]);
+  const [achievements, setAchievements] = useState<string[]>([]);
 
   const [profileImage, setProfileImage] = useState("/avatar-placeholder.png");
+
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MjA3ZTAyZi1iZjE1LTQ5ZjEtMTQ5MS0wOGRlYmI1MWNmNTkiLCJlbWFpbCI6Imhhc2FuQGRvbWFpbi5jb20iLCJuYW1lIjoiSGFzYW4gTWFobXVkIiwicm9sZSI6IlVYIERlc2lnbmVyIiwiZmlyc3ROYW1lIjoiSGFzYW4iLCJsYXN0TmFtZSI6Ik1haG11ZCIsImV4cCI6MTc3OTkwOTU3NSwiaXNzIjoibG1zLWF1dGgtYXBpIiwiYXVkIjoibG1zLWFwaSJ9.kBF0WS7F94jJKH2-f4aIabpIV20sNOasS45KyS-frEI";
+
+  type JwtPayload = {
+    firstName: string;
+    lastName: string;
+  };
+
+  const decodedToken = jwtDecode<JwtPayload>(token);
+
+  const authUser = {
+    firstName: decodedToken.firstName,
+    lastName: decodedToken.lastName,
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -36,8 +47,6 @@ export default function ProfilePage() {
 
         const data = await response.json();
 
-        setFirstName(data.firstName || "");
-        setLastName(data.lastName || "");
         setPhone(data.phoneNumber || "");
         setDescription(data.bio || "");
         setProfileImage(data.profileImageUrl || "/avatar-placeholder.png");
@@ -48,6 +57,10 @@ export default function ProfilePage() {
 
     fetchProfile();
     fetchSkills();
+    fetchAchievements();
+
+    setFirstName(authUser.firstName);
+    setLastName(authUser.lastName);
   }, []);
 
   const fetchSkills = async () => {
@@ -61,6 +74,24 @@ export default function ProfilePage() {
       setSkills(skillNames);
     } catch (error) {
       console.error("Failed to fetch skills", error);
+    }
+  };
+
+  const fetchAchievements = async () => {
+    try {
+      const response = await fetch(
+        "https://localhost:7054/api/profile/achievements",
+      );
+
+      const data = await response.json();
+
+      const achievementTitles = data.map(
+        (achievement: { title: string }) => achievement.title,
+      );
+
+      setAchievements(achievementTitles);
+    } catch (error) {
+      console.error("Failed to fetch achievements", error);
     }
   };
 
