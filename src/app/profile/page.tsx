@@ -32,16 +32,25 @@ export default function ProfilePage() {
     "Frontend",
   ]);
 
-  const [profileImage, setProfileImage] = useState(
-    "/images/avatar-placeholder.svg",
-  );
+  const [profileImage, setProfileImage] = useState("/avatar-placeholder.png");
 
-  // ── Mock fetch ─────────────────────────────
   useEffect(() => {
-    // Temporary mock user until gateway/auth integration is ready
-    setFirstName("Hasan");
-    setLastName("Mahmud");
-    setDescription("Logged in as UX Designer");
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch("https://localhost:7054/api/profile");
+
+        const data = await response.json();
+
+        setFirstName(data.firstName || "");
+        setLastName(data.lastName || "");
+        setPhone(data.phoneNumber || "");
+        setDescription(data.bio || "");
+      } catch (error) {
+        console.error("Failed to fetch profile", error);
+      }
+    };
+
+    fetchProfile();
   }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -18,7 +18,11 @@ export function ProfileCard({
   return (
     <div className="flex flex-col gap-6 rounded-3xl bg-white p-6">
       {/* Banner */}
-      <div className="h-32 rounded-2xl bg-secondary" />
+      <img
+        src="/cover-image.png"
+        alt="Cover"
+        className="h-32 w-full rounded-2xl object-cover"
+      />
 
       {/* Avatar */}
       <div className="-mt-16 flex justify-center">
