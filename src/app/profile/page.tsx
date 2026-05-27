@@ -40,6 +40,7 @@ export default function ProfilePage() {
         setLastName(data.lastName || "");
         setPhone(data.phoneNumber || "");
         setDescription(data.bio || "");
+        setProfileImage(data.profileImageUrl || "/avatar-placeholder.png");
       } catch (error) {
         console.error("Failed to fetch profile", error);
       }
