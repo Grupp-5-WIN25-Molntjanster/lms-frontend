@@ -44,6 +44,16 @@ export default function ProfilePage() {
     setDescription("Logged in as UX Designer");
   }, []);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setProfileImage(imageUrl);
+  };
+
   // ── Save handler ───────────────────────────
   // Later this will call PUT /api/profile
   const handleSave = () => {
@@ -79,9 +89,18 @@ export default function ProfilePage() {
           <div className="flex items-center gap-4">
             <div className="h-14 w-14 rounded-xl bg-bg" />
 
-            <Button variant="secondary" size="sm">
-              Upload photo
-            </Button>
+            <label>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+
+              <Button type="button" variant="secondary" size="sm">
+                Upload photo
+              </Button>
+            </label>
           </div>
 
           {/* Form */}
