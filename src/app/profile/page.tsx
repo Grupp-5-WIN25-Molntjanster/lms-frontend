@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { ProfileShell } from "@/components/layout/ProfileShell";
+import { ProfileCard } from "@/components/profile/ProfileCard";
+
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -14,16 +16,21 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
 
+  // ── Skills state ───────────────────────────
+  const [skills] = useState<string[]>([
+    "UX Design",
+    "React",
+    "UI Design",
+    "Figma",
+  ]);
+
   // ── Mock fetch ─────────────────────────────
-
-useEffect(() => {
-
-  // Temporary mock user until gateway/auth integration is ready
-  setFirstName("Hasan");
-  setLastName("Mahmud");
-  setDescription("Logged in as UX Designer");
-
-}, []);
+  useEffect(() => {
+    // Temporary mock user until gateway/auth integration is ready
+    setFirstName("Hasan");
+    setLastName("Mahmud");
+    setDescription("Logged in as UX Designer");
+  }, []);
 
   // ── Save handler ───────────────────────────
   // Later this will call PUT /api/profile
@@ -42,7 +49,17 @@ useEffect(() => {
 
   return (
     <ProfileShell active="general">
-      <div className="ml-auto w-full max-w-4xl">
+      {/* Two columns */}
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[350px_1fr]">
+        {/* Left column */}
+        <ProfileCard
+          firstName={firstName}
+          lastName={lastName}
+          description={description}
+          skills={skills}
+        />
+
+        {/* Right column */}
         <Card className="flex flex-col gap-6 p-6">
           {/* Upload row */}
           <div className="flex items-center gap-4">
