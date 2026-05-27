@@ -3,6 +3,7 @@ type ProfileCardProps = {
   lastName: string;
   description: string;
   skills: string[];
+  achievements: string[];
 };
 
 export function ProfileCard({
@@ -10,6 +11,7 @@ export function ProfileCard({
   lastName,
   description,
   skills,
+  achievements,
 }: ProfileCardProps) {
   return (
     <div className="flex flex-col gap-6 rounded-3xl bg-white p-6">
@@ -50,11 +52,16 @@ export function ProfileCard({
       <div className="flex flex-col gap-3">
         <h3 className="text-lg font-semibold text-secondary">Achievements</h3>
 
-        <div className="flex gap-3">
-          <div className="h-10 w-10 rounded-full bg-orange-100" />
-          <div className="h-10 w-10 rounded-full bg-orange-100" />
-          <div className="h-10 w-10 rounded-full bg-orange-100" />
-          <div className="h-10 w-10 rounded-full bg-orange-100" />
+        <div className="flex flex-wrap gap-3">
+          {achievements.map((achievement, index) => (
+            <div
+              key={index}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-sm"
+              title={achievement}
+            >
+              🏆
+            </div>
+          ))}
         </div>
       </div>
 

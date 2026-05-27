@@ -24,6 +24,14 @@ export default function ProfilePage() {
     "Figma",
   ]);
 
+  // ── Achievements state ───────────────────────────
+  const [achievements] = useState<string[]>([
+    "Top Student",
+    "React Course",
+    "UI Design",
+    "Frontend",
+  ]);
+
   // ── Mock fetch ─────────────────────────────
   useEffect(() => {
     // Temporary mock user until gateway/auth integration is ready
@@ -57,6 +65,7 @@ export default function ProfilePage() {
           lastName={lastName}
           description={description}
           skills={skills}
+          achievements={achievements}
         />
 
         {/* Right column */}
