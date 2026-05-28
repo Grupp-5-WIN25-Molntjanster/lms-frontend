@@ -23,7 +23,9 @@ export default function ProfilePage() {
   const [skills, setSkills] = useState<string[]>([]);
 
   // ── Achievements state ───────────────────────────
-  const [achievements, setAchievements] = useState<string[]>([]);
+  const [achievements, setAchievements] = useState<
+    { title: string; icon: string }[]
+  >([]);
 
   const [profileImage, setProfileImage] = useState("/avatar-placeholder.png");
   const token = process.env.NEXT_PUBLIC_TOKEN!;
@@ -82,11 +84,7 @@ export default function ProfilePage() {
 
       const data = await response.json();
 
-      const achievementTitles = data.map(
-        (achievement: { title: string }) => achievement.title,
-      );
-
-      setAchievements(achievementTitles);
+      setAchievements(data);
     } catch (error) {
       console.error("Failed to fetch achievements", error);
     }

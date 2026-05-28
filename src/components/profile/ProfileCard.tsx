@@ -3,7 +3,10 @@ type ProfileCardProps = {
   lastName: string;
   description: string;
   skills: string[];
-  achievements: string[];
+  achievements: {
+    title: string;
+    icon: string;
+  }[];
   profileImage: string;
 };
 
@@ -67,9 +70,13 @@ export function ProfileCard({
             <div
               key={index}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-sm"
-              title={achievement}
+              title={achievement.title}
             >
-              🏆
+              <img
+                src={`/${achievement.icon}`}
+                alt={achievement.title}
+                className="h-8 w-8 object-contain"
+              />
             </div>
           ))}
         </div>
