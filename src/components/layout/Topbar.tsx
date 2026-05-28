@@ -1,6 +1,7 @@
 "use client";
 
 import { BellIcon, MailIcon, MenuIcon, SearchIcon } from "@/components/icons";
+import { SearchDropdown } from "@/components/search/SearchDropdown";
 
 type TopbarProps = {
   onMenuClick?: () => void;
@@ -19,14 +20,9 @@ export function Topbar({ onMenuClick }: TopbarProps) {
       </button>
 
       {/* Search — hidden on mobile, visible on md+ */}
-      <label className="hidden flex-1 max-w-[480px] items-center gap-3 rounded-2xl bg-bg px-5 py-3.5 md:flex">
-        <SearchIcon className="shrink-0 text-muted" />
-        <input
-          type="search"
-          placeholder="Search task..."
-          className="w-full bg-transparent text-sm outline-none placeholder:text-muted"
-        />
-      </label>
+      <div className="hidden flex-1 md:flex">
+        <SearchDropdown />
+      </div>
 
       {/* Search icon only — mobile */}
       <button
