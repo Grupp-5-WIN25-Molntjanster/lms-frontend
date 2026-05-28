@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { jwtDecode } from "jwt-decode";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
+
 export default function ProfilePage() {
   // ── Form state ─────────────────────────────
   const [firstName, setFirstName] = useState("");
@@ -24,10 +26,7 @@ export default function ProfilePage() {
   const [achievements, setAchievements] = useState<string[]>([]);
 
   const [profileImage, setProfileImage] = useState("/avatar-placeholder.png");
-
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MjA3ZTAyZi1iZjE1LTQ5ZjEtMTQ5MS0wOGRlYmI1MWNmNTkiLCJlbWFpbCI6Imhhc2FuQGRvbWFpbi5jb20iLCJuYW1lIjoiSGFzYW4gTWFobXVkIiwicm9sZSI6IlVYIERlc2lnbmVyIiwiZmlyc3ROYW1lIjoiSGFzYW4iLCJsYXN0TmFtZSI6Ik1haG11ZCIsImV4cCI6MTc3OTkwOTU3NSwiaXNzIjoibG1zLWF1dGgtYXBpIiwiYXVkIjoibG1zLWFwaSJ9.kBF0WS7F94jJKH2-f4aIabpIV20sNOasS45KyS-frEI";
-
+  const token = process.env.NEXT_PUBLIC_TOKEN!;
   type JwtPayload = {
     firstName: string;
     lastName: string;
@@ -43,7 +42,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch("https://localhost:7054/api/profile");
+        const response = await fetch(`${API_BASE}/api/profile`);
 
         const data = await response.json();
 
@@ -65,7 +64,7 @@ export default function ProfilePage() {
 
   const fetchSkills = async () => {
     try {
-      const response = await fetch("https://localhost:7054/api/profile/skills");
+      const response = await fetch(`${API_BASE}/api/profile/skills`);
 
       const data = await response.json();
 
@@ -79,9 +78,7 @@ export default function ProfilePage() {
 
   const fetchAchievements = async () => {
     try {
-      const response = await fetch(
-        "https://localhost:7054/api/profile/achievements",
-      );
+      const response = await fetch(`${API_BASE}/api/profile/achievements`);
 
       const data = await response.json();
 
@@ -105,13 +102,10 @@ export default function ProfilePage() {
 
       formData.append("file", file);
 
-      const response = await fetch(
-        "https://localhost:7054/api/profile/upload-image",
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      const response = await fetch(`${API_BASE}/api/profile/upload-image`, {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error("Failed to upload image");
@@ -130,7 +124,7 @@ export default function ProfilePage() {
   // ── Save handler ───────────────────────────
   const handleSave = async () => {
     try {
-      const response = await fetch("https://localhost:7054/api/profile", {
+      const response = await fetch(`${API_BASE}/api/profile`, {
         method: "PUT",
 
         headers: {
