@@ -2,29 +2,6 @@ import Link from "next/link";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Card, Button } from "@/components/ui";
 
-const popularCourses = [
-    {
-        title: "Graphic Design",
-        subtitle: "Creating Visual Content",
-        icon: "/courseImages/graphic-d-icon.svg",
-    },
-    {
-        title: "UI/UX Design",
-        subtitle: "Combines User Interface (UI)",
-        icon: "/courseImages/uiux-d-icon.svg",
-    },
-    {
-        title: "Brand Identity",
-        subtitle: "The Collection of Visual",
-        icon: "/courseImages/brand-i-icon.svg",
-    },
-    {
-        title: "Web Design",
-        subtitle: "Process of Creating Websites",
-        icon: "/courseImages/web-d-icon.svg",
-    },
-];
-
 type Course = {
   id: number;
   title: string;
@@ -44,7 +21,26 @@ const courseImages: Record<number, string> = {
     6: "/courseImages/sketch-small.svg",
 };
 
+type PopularCourse = {
+    title: string;
+    subtitle: string;
+    iconUrl: string;
+};
 
+async function getPopularCourses(): Promise<PopularCourse[]> {
+    const res = await fetch(
+        "http://localhost:5006/api/popular-courses",
+        {
+            cache: "no-store",
+        }
+    );
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch popular courses");
+    }
+
+    return res.json();
+}
 
 async function getCourses(): Promise<Course[]> {
   const res = await fetch("http://localhost:5006/api/courses", {
@@ -60,6 +56,7 @@ async function getCourses(): Promise<Course[]> {
 
 export default async function CoursesPage() {
   const courses = await getCourses();
+    const popularCourses = await getPopularCourses();
 
     return (
         <DashboardShell>
@@ -75,7 +72,7 @@ export default async function CoursesPage() {
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                         {popularCourses.map((course) => {
-                            const Icon = course.icon;
+                            const Icon = course.iconUrl;
 
                             return (
                                 <div
@@ -83,7 +80,7 @@ export default async function CoursesPage() {
                                     className="flex items-center justify-between rounded-2xl bg-bg px-4 py-3">
                                     <div className="flex items-center gap-3">
                                         <div className="flex h-20 w-20 items-center justify-center">
-                                            <img src={course.icon} alt={course.title}/>
+                                            <img src={course.iconUrl} alt={course.title}/>
                                         </div>
                                         <div>
                                             <h3 className="text-base font-semibold text-secondary">
