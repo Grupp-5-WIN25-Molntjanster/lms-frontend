@@ -62,7 +62,7 @@ export default function EditCoursePage() {
         loadCourse();
     }, [id, router]);
 
-    async function handleSubmit(event: React.FormEvent) {
+    async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
         setIsSubmitting(true);
 

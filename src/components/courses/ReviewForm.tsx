@@ -11,7 +11,7 @@ export function ReviewForm({ courseId }: ReviewFormProps) {
     const [comment, setComment] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    async function handleSubmit(event: React.FormEvent) {
+    async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
 
         setIsSubmitting(true);
