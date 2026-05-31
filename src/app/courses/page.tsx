@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Card, Button } from "@/components/ui";
+import { DeleteCourseButton } from "@/components/courses/DeleteCourseButton";
 
 type Course = {
   id: number;
@@ -54,12 +55,15 @@ async function getCourses(): Promise<Course[]> {
   return res.json();
 }
 
+
+
 export default async function CoursesPage() {
   const courses = await getCourses();
     const popularCourses = await getPopularCourses();
 
     return (
         <DashboardShell>
+
             <div className="flex flex-col gap-6">
 
                 {/* Popular This Week */}
@@ -107,7 +111,11 @@ export default async function CoursesPage() {
                     <h1 className="text-3xl font-bold text-secondary">
                         All Courses
                     </h1>
-
+                    <Link href="/courses/create">
+                        <Button variant="primary" size="lg">
+                            Create Course
+                        </Button>
+                    </Link>
                     <button className="text-primary font-medium">
                         See All
                     </button>
@@ -122,7 +130,7 @@ export default async function CoursesPage() {
 
                             <div className="overflow-hidden rounded-2xl">
                                 <img
-                                    src={courseImages[course.id]}
+                                    src={course.imageUrl}
                                     alt={course.title}
                                     className="w-full object-cover rounded-2xl"/>
                             </div>
@@ -142,11 +150,21 @@ export default async function CoursesPage() {
                                         {course.lessonsCount} Lessons · {course.duration}
                                     </p>
 
-                                    <Link href={`/courses/${course.id}`}>
-                                        <Button variant="primary" size="lg">
-                                            View Details ↗
-                                        </Button>
-                                    </Link>
+                                    <div className="flex gap-2">
+                                        <Link href={`/courses/${course.id}`}>
+                                            <Button variant="primary" size="lg">
+                                                View
+                                            </Button>
+                                        </Link>
+
+                                        <Link href={`/courses/${course.id}/edit`}>
+                                            <Button variant="secondary" size="lg">
+                                                Edit
+                                            </Button>
+                                        </Link>
+
+                                        <DeleteCourseButton id={course.id} />
+                                    </div>
                                 </div>
                             </div>
                         </Card>
