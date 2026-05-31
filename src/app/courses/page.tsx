@@ -13,15 +13,6 @@ type Course = {
   duration: string;
 };
 
-const courseImages: Record<number, string> = {
-    1: "/courseImages/ai-small.svg",
-    2: "/courseImages/data-science-small.svg",
-    3: "/courseImages/digital-marketing-small.svg",
-    4: "/courseImages/ui-ux-small.svg",
-    5: "/courseImages/full-stack-small.svg",
-    6: "/courseImages/sketch-small.svg",
-};
-
 type PopularCourse = {
     title: string;
     subtitle: string;
@@ -76,7 +67,6 @@ export default async function CoursesPage() {
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                         {popularCourses.map((course) => {
-                            const Icon = course.iconUrl;
 
                             return (
                                 <div
