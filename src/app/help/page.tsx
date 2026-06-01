@@ -12,6 +12,7 @@ export default async function HelpPage() {
         {faqs.map((faq) => (
           <FaqCard
             key={faq.id}
+            id={`faq-${faq.id}`}
             title={faq.title}
             summary={faq.summary}
             content={faq.content}
