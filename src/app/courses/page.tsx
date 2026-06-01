@@ -22,7 +22,7 @@ type PopularCourse = {
 
 async function getPopularCourses(): Promise<PopularCourse[]> {
     const res = await fetch(
-        `${API_URL}/api/courses`,
+        `${API_URL}/api/popular-courses`,
         {
             cache: "no-store",
         }
