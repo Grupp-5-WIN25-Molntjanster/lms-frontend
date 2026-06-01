@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { LessonExercise } from "@/components/courses/LessonExercise";
 import { ReviewForm } from "@/components/courses/ReviewForm";
+import { API_URL } from "@/lib/api";
 
 type Props = {
     params: Promise<{ id: string }>;
@@ -37,7 +38,7 @@ type Review = {
 };
 
 async function getCourse(id: string): Promise<Course> {
-    const res = await fetch(`http://localhost:5006/api/courses/${id}`, {
+    const res = await fetch(`${API_URL}/api/courses/${id}`, {
         cache: "no-store",
     });
 
@@ -47,7 +48,7 @@ async function getCourse(id: string): Promise<Course> {
 }
 
 async function getRatingSummary(id: string): Promise<RatingSummary> {
-    const res = await fetch(`http://localhost:5006/api/reviews/course/${id}/summary`, {
+    const res = await fetch(`${API_URL}/api/reviews/course/${id}/summary`, {
         cache: "no-store",
     });
 
@@ -57,7 +58,7 @@ async function getRatingSummary(id: string): Promise<RatingSummary> {
 }
 
 async function getReviews(id: string): Promise<Review[]> {
-    const res = await fetch(`http://localhost:5006/api/reviews/course/${id}`, {
+    const res = await fetch(`${API_URL}/api/reviews/course/${id}`, {
         cache: "no-store",
     });
 

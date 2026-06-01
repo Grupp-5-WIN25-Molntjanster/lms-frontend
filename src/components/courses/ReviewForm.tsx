@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { API_URL } from "@/lib/api";
 
 type ReviewFormProps = {
     courseId: number;
@@ -16,7 +17,7 @@ export function ReviewForm({ courseId }: ReviewFormProps) {
 
         setIsSubmitting(true);
 
-        const res = await fetch("http://localhost:5006/api/reviews", {
+        const res = await fetch(`${API_URL}/api/reviews`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

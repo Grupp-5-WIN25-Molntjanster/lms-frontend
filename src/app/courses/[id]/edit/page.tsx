@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Button } from "@/components/ui/Button";
+import { API_URL } from "@/lib/api";
 
 type Course = {
     id: number;
@@ -40,7 +41,7 @@ export default function EditCoursePage() {
 
     useEffect(() => {
         async function loadCourse() {
-            const res = await fetch(`http://localhost:5006/api/courses/${id}`);
+            const res = await fetch(`${API_URL}/api/courses/${id}`);
 
             if (!res.ok) {
                 alert("Could not load course.");
@@ -66,7 +67,7 @@ export default function EditCoursePage() {
         event.preventDefault();
         setIsSubmitting(true);
 
-        const res = await fetch(`http://localhost:5006/api/courses/${id}`, {
+        const res = await fetch(`${API_URL}/api/courses/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

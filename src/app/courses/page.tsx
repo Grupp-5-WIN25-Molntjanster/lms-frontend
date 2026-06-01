@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Card, Button } from "@/components/ui";
 import { DeleteCourseButton } from "@/components/courses/DeleteCourseButton";
+import { API_URL } from "@/lib/api";
 
 type Course = {
   id: number;
@@ -21,7 +22,7 @@ type PopularCourse = {
 
 async function getPopularCourses(): Promise<PopularCourse[]> {
     const res = await fetch(
-        "http://localhost:5006/api/popular-courses",
+        `${API_URL}/api/courses`,
         {
             cache: "no-store",
         }
@@ -35,7 +36,7 @@ async function getPopularCourses(): Promise<PopularCourse[]> {
 }
 
 async function getCourses(): Promise<Course[]> {
-  const res = await fetch("http://localhost:5006/api/courses", {
+  const res = await fetch(`${API_URL}/api/courses`, {
     cache: "no-store",
   });
 

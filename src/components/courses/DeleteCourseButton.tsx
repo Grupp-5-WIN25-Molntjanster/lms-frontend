@@ -1,5 +1,7 @@
 "use client";
 
+import { API_URL } from "@/lib/api";
+
 type DeleteCourseButtonProps = {
     id: number;
 };
@@ -10,7 +12,7 @@ export function DeleteCourseButton({ id }: DeleteCourseButtonProps) {
 
         if (!confirmed) return;
 
-        const res = await fetch(`http://localhost:5006/api/courses/${id}`, {
+        const res = await fetch(`${API_URL}/api/courses/${id}`, {
             method: "DELETE",
         });
 

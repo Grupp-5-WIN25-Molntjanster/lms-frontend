@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Button } from "@/components/ui/Button";
+import { API_URL } from "@/lib/api";
 
 export default function CreateCoursePage() {
     const router = useRouter();
@@ -29,7 +30,7 @@ export default function CreateCoursePage() {
         event.preventDefault();
         setIsSubmitting(true);
 
-        const res = await fetch("http://localhost:5006/api/courses", {
+        const res = await fetch(`${API_URL}/api/courses`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
