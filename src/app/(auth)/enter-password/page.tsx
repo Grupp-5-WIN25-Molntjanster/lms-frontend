@@ -52,7 +52,7 @@ export default function EnterPasswordPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-                ceholder="Type your password"
+                placeholder="Type your password"
               className="w-full bg-transparent text-base outline-none placeholder:text-muted"
               required
             />

@@ -11,7 +11,7 @@ import Link from "next/link";
 // ============================================================
 interface ModuleDto {
   id: string;
-  courseId: string;
+  courseId: number;
   title: string;
   description: string | null;
   order: number;
@@ -786,7 +786,7 @@ export default function CourseContentEditorPage() {
     setLoading(true);
     try {
       const res = await contentApi.getModules(courseId);
-      setModules(res.data?.items || []);
+      setModules((res.data?.items || []) as ModuleDto[]);
     } catch {
       setMsg("Failed to load modules.");
     } finally {
@@ -803,7 +803,7 @@ export default function CourseContentEditorPage() {
     setLessonsLoading((prev) => ({ ...prev, [moduleId]: true }));
     try {
       const res = await contentApi.getLessons(moduleId, 1, 50);
-      setLessonsMap((prev) => ({ ...prev, [moduleId]: res.data?.items || [] }));
+      setLessonsMap((prev) => ({ ...prev, [moduleId]: (res.data?.items || []) as any }));
     } catch {
       setMsg("Failed to load lessons.");
     } finally {
@@ -828,7 +828,7 @@ export default function CourseContentEditorPage() {
     setLessonsLoading((prev) => ({ ...prev, [moduleId]: true }));
     try {
       const res = await contentApi.getLessons(moduleId, 1, 50);
-      setLessonsMap((prev) => ({ ...prev, [moduleId]: res.data?.items || [] }));
+      setLessonsMap((prev) => ({ ...prev, [moduleId]: (res.data?.items || []) as any }));
     } catch {
       setMsg("Failed to refresh lessons.");
     } finally {
