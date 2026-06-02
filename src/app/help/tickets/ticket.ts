@@ -18,7 +18,6 @@ export async function createTicket(request: TicketRequest): Promise<TicketResult
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TICKET_API_TOKEN}`,
     },
     body: JSON.stringify(request),
   })
