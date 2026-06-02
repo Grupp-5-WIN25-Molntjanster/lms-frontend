@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { ProfileShell } from "@/components/layout/ProfileShell";
 import { ProfileCard } from "@/components/profile/ProfileCard";
-
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -48,43 +46,29 @@ export default function ProfilePage() {
     lastName: decodedToken.lastName,
   };
 
-  // körs när sidan laddas
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        // hämtar profile data
-        const response = await fetch(`${API_BASE}/api/profile`);
+  // ============================================================
+  // FIX 1: Moved functions ABOVE the useEffect that calls them
+  // ============================================================
 
-        const data = await response.json();
-
-        // sätter värden i formuläret
-        setPhone(data.phoneNumber || "");
-        setDescription(data.bio || "");
-        setProfileImage(data.profileImageUrl || "/avatar-placeholder.png");
-      } catch (error) {
-        console.error("kunde inte hämta profile", error);
-      }
-    };
-
-    fetchProfile();
-    fetchSkills();
-    fetchAchievements();
-
-    // firstname och lastname kommer från jwt
-    setFirstName(authUser.firstName);
-    setLastName(authUser.lastName);
-  }, []);
+  // hämtar profile
+  const fetchProfile = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/profile`);
+      const data = await response.json();
+      setPhone(data.phoneNumber || "");
+      setDescription(data.bio || "");
+      setProfileImage(data.profileImageUrl || "/avatar-placeholder.png");
+    } catch (error) {
+      console.error("kunde inte hämta profile", error);
+    }
+  };
 
   // hämtar skills
   const fetchSkills = async () => {
     try {
       const response = await fetch(`${API_BASE}/api/profile/skills`);
-
       const data = await response.json();
-
-      // gör om objekten till bara namn
       const skillNames = data.map((skill: { name: string }) => skill.name);
-
       setSkills(skillNames);
     } catch (error) {
       console.error("kunde inte hämta skills", error);
@@ -95,14 +79,27 @@ export default function ProfilePage() {
   const fetchAchievements = async () => {
     try {
       const response = await fetch(`${API_BASE}/api/profile/achievements`);
-
       const data = await response.json();
-
       setAchievements(data);
     } catch (error) {
       console.error("kunde inte hämta achievements", error);
     }
   };
+
+  // ============================================================
+  // FIX 2: useEffect now comes AFTER all function declarations
+  // ============================================================
+  useEffect(() => {
+    fetchProfile();
+    fetchSkills();
+    fetchAchievements();
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFirstName(authUser.firstName);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLastName(authUser.lastName);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // upload av profilbild
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
