@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
@@ -16,11 +18,13 @@ import {
   VideoIcon,
   XIcon,
 } from "@/components/icons";
+import { authApi, clearTokens, getUser } from "@/lib/api";
 
 type NavItem = {
   href: string;
   label: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  roles?: string[];
 };
 
 const MENU: NavItem[] = [
@@ -72,37 +76,62 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const user = getUser();
+  const role = user?.role || "Student";
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   const isActive = (href: string) =>
     href === "/dashboard" ? pathname === href : pathname.startsWith(href);
+
+  // Filter menu items by role
+  const filteredMenu = MENU.filter(
+    (item) => !item.roles || item.roles.includes(role),
+  );
+
+  // Handle logout via API Gateway
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (refreshToken) {
+        await authApi.logout(refreshToken);
+      }
+    } catch {
+      console.log("Logout API failed, clearing local storage");
+    }
+    clearTokens();
+    router.push("/sign-in");
+  };
 
   return (
     <aside className="flex h-full w-[280px] shrink-0 flex-col gap-6 overflow-y-auto border-r border-secondary/10 bg-white px-5 py-6 lg:w-[300px]">
       {/* Logo + close button on mobile */}
       <div className="flex items-center justify-between px-2 py-2">
-          <Image
-            src="/logo.png"
-            alt="Shiko Logo"
-            width={140}
-            height={40}
-            className="h-10 w-auto"
-            priority
-          />
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="grid h-9 w-9 place-items-center rounded-xl bg-bg text-secondary lg:hidden"
-              aria-label="Close menu"
-            >
-              <XIcon />
-            </button>
-          )}
+        <Image
+          src="/logo2.png"
+          alt="Shiko Logo"
+          width={140}
+          height={40}
+          className="h-10 w-auto"
+          priority
+        />
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="grid h-9 w-9 place-items-center rounded-xl bg-bg text-secondary lg:hidden"
+            aria-label="Close menu"
+          >
+            <XIcon />
+          </button>
+        )}
       </div>
 
       <nav className="flex flex-col gap-1.5">
         <p className="px-2.5 pb-1 text-xs font-semibold uppercase tracking-widest text-muted">
           Menu
         </p>
-        {MENU.map((item) => (
+        {filteredMenu.map((item) => (
           <NavLink key={item.href} item={item} active={isActive(item.href)} />
         ))}
       </nav>
@@ -114,23 +143,32 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
         {GENERAL.map((item) => (
           <NavLink key={item.href} item={item} active={isActive(item.href)} />
         ))}
-        <Link
-          href="/sign-in"
-          className="flex items-center gap-4 rounded-2xl py-2.5 pl-2.5 pr-4 transition hover:bg-bg"
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+          className="flex w-full items-center gap-4 rounded-full py-2.5 pl-2.5 pr-4 text-left transition hover:bg-red-50 disabled:opacity-50"
         >
-          <span className="grid h-[50px] w-[50px] place-items-center rounded-xl bg-primary text-white">
+          <span className="grid h-[50px] w-[50px] place-items-center rounded-full bg-primary text-white">
             <LogoutIcon />
           </span>
-          <span className="flex-1 text-base font-medium text-primary">Log Out</span>
-        </Link>
+          <span className="flex-1 text-base font-medium text-primary">
+            {isLoggingOut ? "Logging out..." : "Log Out"}
+          </span>
+        </button>
       </nav>
 
-      {/* Promo — Download Our Mobile App */}
+      {/* Promo */}
       <div className="relative mt-auto overflow-hidden rounded-2xl p-5 text-white">
         <Image src="/mobile-bg.png" alt="" fill className="object-cover" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10">
-          <p className="text-lg font-bold leading-snug">Download Our<br />Mobile App</p>
+          <p className="text-lg font-bold leading-snug">
+            Download Our
+            <br />
+            Mobile App
+          </p>
           <button className="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold">
             Download App
           </button>

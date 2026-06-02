@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { DashboardShell } from "@/components/layout/DashboardShell";
-import { LessonExercise } from "@/components/courses/LessonExercise";
 import { ReviewForm } from "@/components/courses/ReviewForm";
+import { CourseLessonList } from "@/components/courses/CourseLessonList";
 import { API_URL } from "@/lib/api";
+import { EnrollButton } from "@/components/courses/EnrollButton";
+import { CourseManagementMenu } from "@/components/courses/CourseManagementMenu";
+import { getUser } from "@/lib/api";
 
 type Props = {
     params: Promise<{ id: string }>;
-    searchParams: Promise<{ tab?: string; showAll?: string }>; };
+    searchParams: Promise<{ tab?: string; showAll?: string }>;
+};
 
 type Course = {
     id: number;
@@ -85,7 +89,8 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
 
     const activeTab = tab ?? "overview";
     const showAllReviews = showAll === "true";
-
+    const user = getUser();
+    const isStudent = user?.role === "Student" || !user;
     const course = await getCourse(id);
     const summary = await getRatingSummary(id);
     const reviews = await getReviews(id);
@@ -93,8 +98,12 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
 
     return (
         <DashboardShell>
-        
+            {/* ============================================================ */}
+            {/* TWO-COLUMN GRID – Left: Content | Right: Sidebar */}
+            {/* ============================================================ */}
             <div className="grid grid-cols-[minmax(0,1fr)_420px] gap-8">
+                
+                {/* ── LEFT COLUMN: Main Content ── */}
                 <section className="flex flex-col gap-6">
                     <p className="text-xl text-muted">
                         Courses » <span className="font-semibold text-secondary">{course.title}</span>
@@ -105,7 +114,8 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
                             <img
                                 src={getCourseImageUrl(course.imageUrl)}
                                 alt={course.title}
-                                className="h-[650px] w-full object-cover"/>
+                                className="h-[650px] w-full object-cover"
+                            />
                         </div>
 
                         <h1 className="mt-6 text-5xl font-bold leading-tight text-secondary">
@@ -121,24 +131,33 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
                             </span>
                         </div>
 
+                        {/* Tabs */}
                         <div className="mt-7 flex gap-8 text-2xl">
                             <Link href={`/courses/${id}`} className={getTabClass(activeTab === "overview")}>
                                 Overview
                             </Link>
-
+                            <Link href={`/courses/${id}?tab=content`} className={getTabClass(activeTab === "content")}>
+                                Content
+                            </Link>
                             <Link href={`/courses/${id}?tab=faqs`} className={getTabClass(activeTab === "faqs")}>
                                 FAQs
                             </Link>
-
                             <Link href={`/courses/${id}?tab=reviews`} className={getTabClass(activeTab === "reviews")}>
                                 Reviews
                             </Link>
-
                             <Link href={`/courses/${id}?tab=instructor`} className={getTabClass(activeTab === "instructor")}>
                                 Instructor
                             </Link>
                         </div>
 
+                        {/* Content Tab */}
+                        {activeTab === "content" && (
+                            <div className="mt-7">
+                                <CourseLessonList courseId={id} />
+                            </div>
+                        )}
+
+                        {/* Overview Tab */}
                         {activeTab === "overview" && (
                             <>
                                 <div className="mt-7">
@@ -151,7 +170,6 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
 
                                 <div className="mt-7">
                                     <h2 className="text-4xl font-bold text-secondary">Key Point</h2>
-
                                     <div className="mt-4 grid grid-cols-2 gap-x-12 gap-y-3 text-xl text-muted">
                                         <p className="text-primary">✓ <span className="text-muted">Learn practical skills</span></p>
                                         <p className="text-primary">✓ <span className="text-muted">Real-world examples</span></p>
@@ -164,31 +182,26 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
                             </>
                         )}
 
+                        {/* Reviews Tab */}
                         {activeTab === "reviews" && (
                             <div className="mt-8">
                                 <div className="grid grid-cols-[220px_1fr_600px] gap-10">
-                                    {/* Average Rating */}
                                     <div>
                                         <h2 className="text-3xl font-bold text-secondary">Average Rating</h2>
-
                                         <div className="mt-5 flex h-36 w-52 flex-col items-center justify-center rounded-2xl bg-gray-50">
                                             <div className="text-5xl font-bold text-secondary">
                                                 {summary.averageRating.toFixed(1)}
                                                 <span className="text-xl text-muted">/5</span>
                                             </div>
-
                                             <p className="mt-2 text-xl text-muted">
                                                 Based on {summary.totalReviews} reviews
                                             </p>
-
                                             <p className="mt-2 text-primary">★★★★★</p>
                                         </div>
                                     </div>
 
-                                    {/* Detailed Rating */}
                                     <div>
                                         <h2 className="text-3xl font-bold text-secondary">Detailed Rating</h2>
-
                                         <div className="text-xl mt-5 space-y-4">
                                             {[
                                                 { label: "5", value: summary.fiveStar },
@@ -201,88 +214,59 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
                                                     summary.totalReviews > 0
                                                         ? (item.value / summary.totalReviews) * 100
                                                         : 0;
-
                                                 return (
                                                     <div key={item.label} className="flex items-center gap-4">
-                                                        <span className="w-12 text-xl text-muted">
-                                                            {Math.round(percent)}%
-                                                        </span>
-
-                                                        <span className="text-xl w-24 text-primary">
-                                                            {"★".repeat(Number(item.label))}
-                                                        </span>
-
+                                                        <span className="w-12 text-xl text-muted">{Math.round(percent)}%</span>
+                                                        <span className="text-xl w-24 text-primary">{"★".repeat(Number(item.label))}</span>
                                                         <div className="h-2 flex-1 rounded-full bg-gray-200">
-                                                            <div
-                                                                className="h-2 rounded-full bg-primary"
-                                                                style={{ width: `${percent}%` }}
-                                                            />
+                                                            <div className="h-2 rounded-full bg-primary" style={{ width: `${percent}%` }} />
                                                         </div>
                                                     </div>
                                                 );
                                             })}
                                         </div>
-                                        <div className="text-xl mt-4 max-w-[1520px]  pt-8">
+                                        <div className="text-xl mt-4 max-w-[1520px] pt-8">
                                             <ReviewForm courseId={course.id} />
                                         </div>
                                     </div>
 
-                                    {/* Reviews list */}
                                     <div>
                                         <h2 className="text-3xl font-bold text-secondary">Reviews</h2>
-
                                         <div className="text-xl mt-5 max-h-[550px] space-y-4 overflow-y-auto pr-2">
-                                        {reviews.length === 0 ? (
+                                            {reviews.length === 0 ? (
                                                 <p className="text-xl text-muted">No reviews yet.</p>
                                             ) : (
-                                                    visibleReviews.map((review) => (
-                                                        <div
-                                                            key={review.id}
-                                                            className="rounded-2xl border border-gray-200 p-5"
-                                                        >
-                                                            <div className="flex items-center justify-between">
-                                                                <p className="font-semibold text-secondary">
-                                                                    Joachim P.
-                                                                </p>
-
-                                                                <p className="text-sm text-muted">
-                                                                    {new Date(review.createdAtUtc).toLocaleDateString("sv-SE")}
-                                                                </p>
-                                                            </div>
-
-                                                            <div className="mt-2 text-primary">
-                                                                {"★".repeat(review.rating)}
-                                                                <span className="text-gray-300">
-                                                                    {"★".repeat(5 - review.rating)}
-                                                                </span>
-                                                            </div>
-
-                                                            <p className="mt-2 text-muted">
-                                                                {review.comment}
+                                                visibleReviews.map((review) => (
+                                                    <div key={review.id} className="rounded-2xl border border-gray-200 p-5">
+                                                        <div className="flex items-center justify-between">
+                                                            <p className="font-semibold text-secondary">Joachim P.</p>
+                                                            <p className="text-sm text-muted">
+                                                                {new Date(review.createdAtUtc).toLocaleDateString("sv-SE")}
                                                             </p>
                                                         </div>
+                                                        <div className="mt-2 text-primary">
+                                                            {"★".repeat(review.rating)}
+                                                            <span className="text-gray-300">{"★".repeat(5 - review.rating)}</span>
+                                                        </div>
+                                                        <p className="mt-2 text-muted">{review.comment}</p>
+                                                    </div>
                                                 ))
                                             )}
                                         </div>
                                         {reviews.length > 3 && (
                                             <Link
-                                                href={
-                                                    showAllReviews
-                                                        ? `/courses/${id}?tab=reviews`
-                                                        : `/courses/${id}?tab=reviews&showAll=true`
-                                                }
+                                                href={showAllReviews ? `/courses/${id}?tab=reviews` : `/courses/${id}?tab=reviews&showAll=true`}
                                                 className="mt-4 inline-block text-xl font-semibold text-primary"
                                             >
                                                 {showAllReviews ? "Show less" : "See all reviews"}
                                             </Link>
                                         )}
                                     </div>
-
                                 </div>
-
                             </div>
                         )}
 
+                        {/* FAQs Tab */}
                         {activeTab === "faqs" && (
                             <div className="mt-8">
                                 <h2 className="text-4xl font-bold text-secondary">FAQs</h2>
@@ -290,6 +274,7 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
                             </div>
                         )}
 
+                        {/* Instructor Tab */}
                         {activeTab === "instructor" && (
                             <div className="mt-8">
                                 <h2 className="text-4xl font-bold text-secondary">Instructor</h2>
@@ -299,8 +284,15 @@ export default async function CourseDetailsPage({ params, searchParams }: Props)
                     </div>
                 </section>
 
-                <aside className="pt-14">
-                    <LessonExercise />
+                {/* ============================================================ */}
+                {/* RIGHT COLUMN: Sidebar – Lesson List + Enroll + Management */}
+                {/* ============================================================ */}
+                <aside className="flex flex-col gap-6 pt-14">
+                    <CourseLessonList courseId={course.id} />
+                    <CourseManagementMenu courseId={course.id} />
+                    {isStudent && (
+                        <EnrollButton courseId={course.id} courseTitle={course.title} />
+                    )}
                 </aside>
             </div>
         </DashboardShell>

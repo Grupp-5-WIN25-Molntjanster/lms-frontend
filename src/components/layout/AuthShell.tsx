@@ -18,7 +18,7 @@ export function AuthShell({ children }: AuthShellProps) {
         {/* Left — image panel */}
         <div className="relative hidden w-[45%] shrink-0 lg:block">
           <Image
-            src="/auth/plates.jpg"
+            src="/plates.jpg"
             alt=""
             fill
             sizes="(min-width: 1024px) 45vw, 0px"
