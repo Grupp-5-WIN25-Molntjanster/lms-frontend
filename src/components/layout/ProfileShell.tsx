@@ -6,9 +6,7 @@ import { HelpIcon } from "@/components/icons";
 
 const TABS = [
   { slug: "general" as const, href: "/profile", label: "General" },
-  { slug: "team" as const, href: "/team", label: "Team" },
-  { slug: "password" as const, href: "/settings/password", label: "Password" },
-  { slug: "notification" as const, href: "/settings/notification", label: "Notification" },
+
 ];
 
 type ActiveTab = (typeof TABS)[number]["slug"];
