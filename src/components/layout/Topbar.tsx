@@ -4,13 +4,13 @@
 import { useState, useEffect } from "react";
 import {
   BellIcon,
-  MailIcon,
   MenuIcon,
   SearchIcon,
   KeyIcon,
 } from "@/components/icons";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { getUser } from "@/lib/api";
+import { SearchDropdown } from "@/components/search/SearchDropdown";
 
 type TopbarProps = {
   onMenuClick?: () => void;
@@ -21,6 +21,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
     useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  
   // ============================================================
   // REPLACED: Get real user data from localStorage (stored after login)
   // ============================================================
@@ -76,15 +77,10 @@ export function Topbar({ onMenuClick }: TopbarProps) {
           <MenuIcon />
         </button>
 
-        {/* Search — hidden on mobile, visible on md+ */}
-        <label className="hidden flex-1 max-w-[480px] items-center gap-3 rounded-2xl bg-bg px-5 py-3.5 md:flex">
-          <SearchIcon className="shrink-0 text-muted" />
-          <input
-            type="search"
-            placeholder="Search task..."
-            className="w-full bg-transparent text-sm outline-none placeholder:text-muted"
-          />
-        </label>
+          {/* Search — hidden on mobile, visible on md+ */}
+      <div className="hidden flex-1 md:flex">
+        <SearchDropdown />
+      </div>
 
         {/* Search icon only — mobile */}
         <button
@@ -93,22 +89,9 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         >
           <SearchIcon />
         </button>
+    
 
         <div className="flex items-center gap-3 lg:gap-5">
-          <button
-            aria-label="Messages"
-            className="grid h-10 w-10 place-items-center rounded-xl bg-bg text-secondary"
-          >
-            <MailIcon />
-          </button>
-          <span className="hidden h-5 w-px bg-secondary/15 sm:block" />
-          <button
-            aria-label="Notifications"
-            className="grid h-10 w-10 place-items-center rounded-xl bg-bg text-secondary"
-          >
-            <BellIcon />
-          </button>
-          <span className="hidden h-5 w-px bg-secondary/15 sm:block" />
 
           {/* User Menu Dropdown */}
           <div className="relative">
