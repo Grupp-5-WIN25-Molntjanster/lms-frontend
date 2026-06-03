@@ -7,15 +7,11 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
 import Image from "next/image";
 import {
-  CalendarIcon,
   GraduationIcon,
   HelpIcon,
   HomeIcon,
   LogoutIcon,
-  SettingsIcon,
-  TeamIcon,
   UserIcon,
-  VideoIcon,
   XIcon,
 } from "@/components/icons";
 import { authApi, clearTokens, getUser } from "@/lib/api";
@@ -28,16 +24,11 @@ type NavItem = {
 };
 
 const MENU: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
-  { href: "/courses", label: "Courses", icon: GraduationIcon },
-  { href: "/calendar", label: "Calendar", icon: CalendarIcon },
-  { href: "/live", label: "Live Class", icon: VideoIcon },
+  { href: "/courses", label: "Courses", icon: GraduationIcon }
 ];
 
 const GENERAL: NavItem[] = [
   { href: "/profile", label: "Profile", icon: UserIcon },
-  { href: "/team", label: "Team", icon: TeamIcon },
-  { href: "/settings/password", label: "Settings", icon: SettingsIcon },
   { href: "/help", label: "Help Center", icon: HelpIcon },
 ];
 
@@ -159,21 +150,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
         </button>
       </nav>
 
-      {/* Promo */}
-      <div className="relative mt-auto overflow-hidden rounded-2xl p-5 text-white">
-        <Image src="/mobile-bg.png" alt="" fill className="object-cover" />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10">
-          <p className="text-lg font-bold leading-snug">
-            Download Our
-            <br />
-            Mobile App
-          </p>
-          <button className="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold">
-            Download App
-          </button>
-        </div>
-      </div>
+
     </aside>
   );
 }

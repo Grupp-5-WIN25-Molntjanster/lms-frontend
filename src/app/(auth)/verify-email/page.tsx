@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AuthShell } from "@/components/layout/AuthShell";
 import { authApi } from "@/lib/api"; // عدّل المسار لو api.ts بمكان تاني
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -47,9 +47,7 @@ export default function VerifyEmailPage() {
           Enter the 6-digit verification code sent to:
         </p>
 
-        <p className="font-semibold text-secondary">
-          {email}
-        </p>
+        <p className="font-semibold text-secondary">{email}</p>
       </div>
 
       {error && (
@@ -93,5 +91,26 @@ export default function VerifyEmailPage() {
         </button>
       </form>
     </AuthShell>
+  );
+}
+
+function VerifyEmailFallback() {
+  return (
+    <AuthShell>
+      <div className="flex flex-col gap-3">
+        <h1 className="text-5xl font-bold leading-tight text-secondary lg:text-6xl">
+          Verify Email
+        </h1>
+        <p className="text-base text-muted">Loading…</p>
+      </div>
+    </AuthShell>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<VerifyEmailFallback />}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }

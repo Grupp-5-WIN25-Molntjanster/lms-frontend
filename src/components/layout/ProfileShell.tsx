@@ -19,10 +19,7 @@ type ProfileShellProps = {
 };
 
 const DEFAULT_TITLE: Record<ActiveTab, string> = {
-  general: "Profile",
-  team: "Team",
-  password: "Settings",
-  notification: "Settings",
+  general: "Profile"
 };
 
 export function ProfileShell({ active, title, children }: ProfileShellProps) {
