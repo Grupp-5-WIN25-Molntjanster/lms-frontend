@@ -59,7 +59,7 @@ export default function SignInPage() {
       if (result.data?.accessToken) {
         setTokens(result.data.accessToken, result.data.refreshToken);
         setUser(result.data.user);
-        router.push("/dashboard");
+        router.push("/courses");
       } else {
         setError("Login succeeded but no token received.");
         setIsLoading(false);
@@ -97,7 +97,7 @@ export default function SignInPage() {
       setError("Account created! Redirecting to verify your email...");
       sessionStorage.setItem("verifyEmail", email);
       setTimeout(() => {
-        router.push(`/verify?email=${encodeURIComponent(email)}`);
+        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
       }, 1500);
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
