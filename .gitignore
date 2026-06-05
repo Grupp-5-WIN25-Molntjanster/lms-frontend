@@ -45,4 +45,11 @@ next-env.d.ts
 # visual studio
 .vs/
 
-.history
+# Local history (VS Code extension)
+.history/
+
+out/
+build/
+# Misc
+*.log
+.DS_Store
